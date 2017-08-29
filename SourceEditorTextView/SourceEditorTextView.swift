@@ -112,9 +112,11 @@ class SourceEditorTextView: UITextView, NSLayoutManagerDelegate {
 
             enumerateLineFragments(forGlyphRange: glyphsToShow) { rect, usedRect, textContainer, glyphRange, stop in
                 let characterRange = self.characterRange(forGlyphRange: glyphRange, actualGlyphRange: nil)
-                let paragraphRange = string.paragraphRange(for: characterRange)
 
-                if characterRange.location == paragraphRange.location {
+                var paragraphStart = 0
+                string.getLineStart(&paragraphStart, end: nil, contentsEnd: nil, for: characterRange)
+
+                if characterRange.location == paragraphStart {
                     // First line fragment of paragraph (before wrapped text, if any)
                     let gutterRect = CGRect(x: origin.x, y: origin.y + rect.origin.y, width: self.lineNumberSize.width, height: max(rect.size.height, self.lineNumberSize.height))
                     let paragraphIndex = textStorage.paragraphIndex(at: characterRange.location)
