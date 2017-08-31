@@ -142,6 +142,9 @@ class SourceEditorTextView: UITextView {
         textStorage.addLayoutManager(layoutManager)
 
         super.init(frame: frame, textContainer: textContainer)
+
+        let fontSize = font?.pointSize ?? UIFont.smallSystemFontSize
+        layoutManager.lineNumberFont = UIFont.monospacedDigitSystemFont(ofSize: fontSize, weight: .regular)
     }
 
     required init?(coder aDecoder: NSCoder) {
