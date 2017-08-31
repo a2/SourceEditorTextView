@@ -106,6 +106,7 @@ class SourceEditorTextView: UITextView {
 
             let string = textStorage.string as NSString
             let attributes: [NSAttributedStringKey: Any] = [.font: lineNumberFont]
+            let options: NSStringDrawingOptions = .usesLineFragmentOrigin
 
             enumerateLineFragments(forGlyphRange: glyphsToShow) { rect, usedRect, textContainer, glyphRange, stop in
                 let characterRange = self.characterRange(forGlyphRange: glyphRange, actualGlyphRange: nil)
@@ -113,18 +114,18 @@ class SourceEditorTextView: UITextView {
 
                 if characterRange.location == paragraphRange.location {
                     // First line fragment of paragraph (before wrapped text, if any)
-                    let gutterRect = CGRect(x: origin.x, y: origin.y + rect.origin.y, width: self.lineNumberSize.width, height: max(rect.size.height, self.lineNumberSize.height))
+                    let gutterRect = CGRect(x: origin.x + rect.origin.x, y: origin.y + rect.origin.y, width: self.lineNumberSize.width, height: self.lineNumberSize.height)
                     let paragraphIndex = textStorage.paragraphIndex(at: characterRange.location)
                     let drawnString = String(paragraphIndex + 1) as NSString
-                    drawnString.draw(with: gutterRect, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
+                    drawnString.draw(with: gutterRect, options: options, attributes: attributes, context: nil)
 
                     // Check if we reached the end and if there is an extra empty line
                     if paragraphRange.upperBound == string.length && self.extraLineFragmentTextContainer != nil {
                         // Get the rect of the current empty line fragment
                         let extraLineFragmentRect = self.extraLineFragmentRect
-                        let newLineGutterRect = CGRect(x: origin.x, y: origin.y + extraLineFragmentRect.origin.y, width: self.lineNumberSize.width, height: max(extraLineFragmentRect.size.height, self.lineNumberSize.height))
+                        let newLineGutterRect = CGRect(x: origin.x + rect.origin.x, y: origin.y + extraLineFragmentRect.origin.y, width: self.lineNumberSize.width, height: self.lineNumberSize.height)
                         let drawnString = String(paragraphIndex + 2) as NSString
-                        drawnString.draw(with: newLineGutterRect, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
+                        drawnString.draw(with: newLineGutterRect, options: options, attributes: attributes, context: nil)
                     }
                 }
             }
