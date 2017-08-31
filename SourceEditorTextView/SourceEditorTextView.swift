@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SourceEditorTextView: UITextView, NSLayoutManagerDelegate {
+class SourceEditorTextView: UITextView {
     class TextContainer: NSTextContainer {
         override var lineFragmentPadding: CGFloat {
             get {
