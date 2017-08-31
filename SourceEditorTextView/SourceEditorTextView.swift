@@ -99,6 +99,16 @@ class SourceEditorTextView: UITextView {
             }
         }
 
+        override func glyphRange(forBoundingRect bounds: CGRect, in container: NSTextContainer) -> NSRange {
+            var range = super.glyphRange(forBoundingRect: bounds, in: container)
+            if range.length == 0 && bounds.intersects(extraLineFragmentRect), let textStorage = textStorage {
+                range = NSRange(location: textStorage.length - 1, length: 1)
+                range = glyphRange(forCharacterRange: range, actualCharacterRange: nil)
+            }
+
+            return range
+        }
+
         override func drawBackground(forGlyphRange glyphsToShow: NSRange, at origin: CGPoint) {
             super.drawBackground(forGlyphRange: glyphsToShow, at: origin)
 
