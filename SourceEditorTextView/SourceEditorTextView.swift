@@ -9,9 +9,6 @@
 import UIKit
 
 class SourceEditorTextView: UITextView {
-    class TextContainer: NSTextContainer {
-    }
-
     class TextStorage: NSTextStorage {
         let attributedString = NSMutableAttributedString()
         var paragraphIndexes = IndexSet()
@@ -143,7 +140,7 @@ class SourceEditorTextView: UITextView {
     }
 
     init(frame: CGRect = .zero) {
-        let textContainer = TextContainer()
+        let textContainer = NSTextContainer()
 
         let layoutManager = LayoutManager()
         layoutManager.addTextContainer(textContainer)
