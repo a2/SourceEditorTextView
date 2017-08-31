@@ -10,13 +10,6 @@ import UIKit
 
 class SourceEditorTextView: UITextView {
     class TextContainer: NSTextContainer {
-        override var lineFragmentPadding: CGFloat {
-            get {
-                guard let layoutManager = layoutManager as? LayoutManager else { return 0 }
-                return layoutManager.lineNumberSize.width
-            }
-            set {}
-        }
     }
 
     class TextStorage: NSTextStorage {
@@ -100,6 +93,10 @@ class SourceEditorTextView: UITextView {
             let longestString = String(repeating: "0", count: maximumParagraphDigits) as NSString
             let size = longestString.size(withAttributes: [.font: lineNumberFont])
             lineNumberSize = CGSize(width: ceil(size.width), height: ceil(size.height))
+
+            DispatchQueue.main.async {
+                self.textContainers.forEach { $0.lineFragmentPadding = self.lineNumberSize.width }
+            }
         }
 
         override func drawBackground(forGlyphRange glyphsToShow: NSRange, at origin: CGPoint) {
